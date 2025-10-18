@@ -416,28 +416,16 @@
 
     /* --- FIN ESTILOS CARRITO --- */
 
-
+    /* --- INICIO CAMBIO --- */
+    /* Se eliminaron las reglas para .product-item que cambiaban a 'column' */
     @media (max-width: 600px) {
-      .product-item {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .product-item img {
-        width: 100%;
-        height: 180px;
-      }
-
-      .product-controls {
-        justify-content: center;
-      }
       
       .modal-content {
         margin: 1rem;
         width: calc(100% - 2rem);
       }
     }
+    /* --- FIN CAMBIO --- */
   </style>
 </head>
 <body>
