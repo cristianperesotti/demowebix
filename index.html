@@ -452,15 +452,56 @@ function updateTotals() {
   renderCart();
 }
 
-function sendWhatsApp() {
-  if (cart.length === 0) return alert('Tu carrito está vacío.');
-  let msg = '🛍️ *Nuevo pedido desde la web:*\n\n';
-  cart.forEach(i => msg += `${i.quantity}x ${i.name} - $${i.price * i.quantity}\n`);
-  msg += `\n*Total:* $${cart.reduce((s,i)=>s+i.price*i.quantity,0)}`;
-  window.open(`https://wa.me/5493541294944?text=${encodeURIComponent(msg)}`, '_blank');
+// Opciones de entrega
+  function toggleAddress() {
+    const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+    document.getElementById('addressField').style.display = deliveryOption === 'envio' ? 'block' : 'none';
+  }
+
+  // WhatsApp
+ function sendWhatsApp() {
+  if (cart.length === 0) {
+    alert('Tu carrito está vacío.');
+    return;
+  }
+
+  const deliveryOption = document.querySelector('input[name="deliveryOption"]:checked').value;
+  let addressText = '';
+
+  if (deliveryOption === 'envio') {
+    const name = document.getElementById('customerName').value.trim();
+    const address = document.getElementById('customerAddress').value.trim();
+    const streets = document.getElementById('customerStreets').value.trim();
+    const phone = document.getElementById('customerPhone').value.trim();
+    const payment = document.getElementById('customerPayment').value.trim();
+
+    if (!name || !address || !streets || !phone || !payment) {
+      alert('Por favor, completa todos los campos de envío antes de confirmar el pedido.');
+      return;
+    }
+
+    addressText = 
+      `\n\n *Datos de envío:*` +
+      `\n Nombre: ${name}` +
+      `\n Dirección: ${address}` +
+      `\n Entre calles: ${streets}` +
+      `\n Teléfono: ${phone}` +
+      `\n Método de pago: ${payment}`;
+  }
+
+  let message = ' *Nuevo pedido desde la web:*\n\n';
+  cart.forEach(item => {
+    message += `${item.quantity} x ${item.name} - $${item.price * item.quantity}\n`;
+  });
+  message += `\n *Total:* $${cart.reduce((sum, i) => sum + i.price * i.quantity, 0)}`;
+  message += `\n *Opción:* ${deliveryOption === 'retiro' ? 'Retiro por local' : 'Envío a domicilio'}${addressText}`;
+
+  const encodedMessage = encodeURIComponent(message);
+  window.open(`https://wa.me/5493541294944?text=${encodedMessage}`, '_blank');
 }
 
-renderProducts();
+  // Inicialización
+  renderProducts();
 </script>
 
 </body>
